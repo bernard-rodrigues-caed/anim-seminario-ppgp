@@ -1,48 +1,77 @@
 /* APENAS PARA VISUALIZAÇÃO EM TESTES*/
-*{
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #ffffff;
+    background-color: #fff;
 }
 /* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
 
-@keyframes btn-ping {
-  0%   { transform: scale(1); opacity: 1; }
-  40%, 100% { transform: scaleX(1.35) scaleY(2); opacity: 0; }
+/* ── Houdini property para ângulo animável ─────────────────────────────────── */
+@property --ang {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
 }
 
+@keyframes light-rotate {
+    to { --ang: 360deg; }
+}
+
+@keyframes glow-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+}
+
+/* ── Botão liquid glass ────────────────────────────────────────────────────── */
 .important-dates-btn {
     border-radius: 25px;
-    border-width: 1px;
-    background-color: #ffff03;
+    border: none;
+    background-color: rgba(155, 185, 242,1);
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    font-style: SemiBold;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 30px;
-    position: relative;
-    padding: 0 10px;
-}
-
-.important-dates-btn:hover{
+    color: #fff;
+    padding: 0 16px;
     cursor: pointer;
+    position: relative;
+    isolation: isolate;
+
+    /* Opção com brilho girando em volta. Não sei se conversa */
+    /* box-shadow:
+        inset calc(sin(var(--ang)) * 1.8px) calc(cos(var(--ang)) * 1.8px) 0 0.5px rgba(255, 255, 255, 0.70),
+        inset calc(sin(var(--ang)) * -1.2px) calc(cos(var(--ang)) * -1.2px) 0 0.5px rgba(0, 0, 0, 0.30),
+        inset 0 0 8px 0 rgba(255, 255, 255, 0.15); */
+
+    animation: light-rotate 6s linear infinite;
+    transition: background-color 0.2s ease;
 }
 
-.important-dates-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 25px;
-  border: 1px solid #9BB9F2;
-  opacity: 0;
-  pointer-events: none;
-  animation: btn-ping 3s ease-out infinite;
+/* glow amarelo — camada separada para poder pulsar independentemente */
+.important-dates-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+    box-shadow:
+        0 0 10px 3px  rgba(155, 185, 242, 0.75),
+        0 0 28px 10px rgba(155, 185, 242, 0.40),
+        0 0 60px 22px rgba(155, 185, 242, 0.18);
+
+        /* rgba(155, 185, 242, 1) */
+    animation: glow-pulse 2.4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.important-dates-btn:hover {
+    background-color: #e8e800;
 }
