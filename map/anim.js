@@ -1,25 +1,46 @@
 // ── Parâmetros de controle ────────────────────────────────────────────────────
 const CONFIG = {
-  // Viagem: da imagem até o destino
-  travelDuration:  1.8,   // duração da viagem de cada bolinha (segundos)
-  travelDelayMax:  2.5,   // atraso aleatório máximo antes de partir (segundos)
-  travelEasing:    'easeOutCubic', // 'easeOutCubic' | 'easeInOutCubic'
+  // Duração de cada fase do ciclo (segundos)
+  holdBefore:       1.0,   // imagem isolada antes dos círculos aparecerem
+  appearDuration:   2.0,   // círculos flutuam no destino
+  convergeDuration: 2.0,   // círculos convergem de volta à imagem
+  holdAfter:        1.0,   // imagem isolada após a convergência
 
-  // Dispersão do ponto de origem dentro da imagem (px, raio a partir do centro)
-  originSpread:    40,
+  // Escalonamento do aparecimento (atraso aleatório máximo por bolinha, em segundos)
+  appearDelayMax:   0.4,
 
-  // Flutuação após chegada
-  floatAmpScale:   0.6,   // multiplica todas as amplitudes de flutuação
-  floatFreqScale:  1.0,   // multiplica todas as frequências de flutuação
-  floatAmpMin:     1.5,   // amplitude mínima (px)
-  floatAmpMax:     5.0,   // amplitude máxima (px)
-  floatFadeIn:     0.8,   // tempo (s) para a flutuação ganhar amplitude total após a chegada
+  // Flutuação
+  floatAmpScale:    0.6,   // multiplica todas as amplitudes de flutuação
+  floatFreqScale:   1.0,   // multiplica todas as frequências de flutuação
+  floatAmpMin:      1.5,   // amplitude mínima (px)
+  floatAmpMax:      5.0,   // amplitude máxima (px)
+  floatFadeIn:      0.6,   // tempo (s) para opacidade e amplitude atingirem o valor final
+
+  // Easing da convergência ('easeInCubic' acelera em direção à imagem | 'easeInOutCubic')
+  convergeEasing:   'easeInCubic',
 };
 // ─────────────────────────────────────────────────────────────────────────────
 
-function easeOutCubic(t)    { return 1 - Math.pow(1 - t, 3); }
+function easeInCubic(t)     { return t * t * t; }
 function easeInOutCubic(t)  { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
-const ease = CONFIG.travelEasing === 'easeInOutCubic' ? easeInOutCubic : easeOutCubic;
+
+const convergeEase = CONFIG.convergeEasing === 'easeInOutCubic' ? easeInOutCubic : easeInCubic;
+
+// Calcula o deslocamento de flutuação em um instante ft (segundos desde o início da fase appear)
+function floatOffset(p, ft) {
+  if (ft <= 0) return { dx: 0, dy: 0 };
+  const fadeIn = CONFIG.floatFadeIn > 0
+    ? easeInOutCubic(Math.min(1, ft / CONFIG.floatFadeIn))
+    : 1;
+  return {
+    dx: fadeIn * (
+      p.ampX1 * Math.sin(2 * Math.PI * p.freqX1 * ft + p.phaseX1)
+    + p.ampX2 * Math.sin(2 * Math.PI * p.freqX2 * ft + p.phaseX2)),
+    dy: fadeIn * (
+      p.ampY1 * Math.sin(2 * Math.PI * p.freqY1 * ft + p.phaseY1)
+    + p.ampY2 * Math.cos(2 * Math.PI * p.freqY2 * ft + p.phaseY2)),
+  };
+}
 
 fetch('Topo-PPGP.svg')
   .then(r => r.text())
@@ -29,7 +50,7 @@ fetch('Topo-PPGP.svg')
 
     const svg = container.querySelector('svg');
 
-    // Calcula o centro da imagem como ponto de origem
+    // Centro da imagem como ponto de convergência
     const imageEl = svg.querySelector('image');
     let originX = 0, originY = 0;
     if (imageEl) {
@@ -55,72 +76,94 @@ fetch('Topo-PPGP.svg')
       const rawAmp = Math.min(CONFIG.floatAmpMax, Math.max(CONFIG.floatAmpMin, r * 0.8));
       const amp    = rawAmp * fa;
 
-      // Ponto de partida: posição aleatória dentro da imagem
-      const angle  = Math.random() * Math.PI * 2;
-      const dist   = Math.random() * CONFIG.originSpread;
-      const startX = originX + Math.cos(angle) * dist;
-      const startY = originY + Math.sin(angle) * dist;
-
-      // Preserva a opacidade original e zera para o fade-in
+      const isMain = circle.id === 'main-circle';
       const opacity0 = circle.style.opacity !== '' ? parseFloat(circle.style.opacity) : 1;
-      circle.style.opacity = '0';
+      if (!isMain) circle.style.opacity = '0';
+      circle.setAttribute('transform', 'translate(0, 0)');
 
-      // cx/cy ficam estáticos; toda movimentação usa transform (não recalcula geometria SVG)
-      const offsetX0 = startX - cx0;
-      const offsetY0 = startY - cy0;
-      circle.setAttribute('transform', `translate(${offsetX0.toFixed(3)}, ${offsetY0.toFixed(3)})`);
+      const delay  = Math.random() * CONFIG.appearDelayMax;
+      const ampX1  = amp * (0.4 + Math.random() * 0.6);
+      const ampX2  = amp * (0.2 + Math.random() * 0.4);
+      const ampY1  = amp * (0.4 + Math.random() * 0.6);
+      const ampY2  = amp * (0.2 + Math.random() * 0.4);
+      const freqX1 = ff * (0.30 + Math.random() * 0.40);
+      const freqX2 = ff * (0.15 + Math.random() * 0.20);
+      const freqY1 = ff * (0.25 + Math.random() * 0.35);
+      const freqY2 = ff * (0.10 + Math.random() * 0.25);
+      const phaseX1 = Math.random() * Math.PI * 2;
+      const phaseX2 = Math.random() * Math.PI * 2;
+      const phaseY1 = Math.random() * Math.PI * 2;
+      const phaseY2 = Math.random() * Math.PI * 2;
+
+      // Posição de flutuação exata no instante em que a convergência começa (determinística)
+      const floatParams = { ampX1, ampX2, ampY1, ampY2, freqX1, freqX2, freqY1, freqY2, phaseX1, phaseX2, phaseY1, phaseY2 };
+      const convFloatT  = Math.max(0, CONFIG.appearDuration - delay);
+      const convStart   = floatOffset(floatParams, convFloatT);
 
       return {
         circle,
-        offsetX0, offsetY0,
+        isMain,
         opacity0,
-        delay:   Math.random() * CONFIG.travelDelayMax,
-        ampX1:   amp * (0.4 + Math.random() * 0.6),
-        ampX2:   amp * (0.2 + Math.random() * 0.4),
-        ampY1:   amp * (0.4 + Math.random() * 0.6),
-        ampY2:   amp * (0.2 + Math.random() * 0.4),
-        freqX1:  ff * (0.30 + Math.random() * 0.40),
-        freqX2:  ff * (0.15 + Math.random() * 0.20),
-        freqY1:  ff * (0.25 + Math.random() * 0.35),
-        freqY2:  ff * (0.10 + Math.random() * 0.25),
-        phaseX1: Math.random() * Math.PI * 2,
-        phaseX2: Math.random() * Math.PI * 2,
-        phaseY1: Math.random() * Math.PI * 2,
-        phaseY2: Math.random() * Math.PI * 2,
+        delay,
+        convStartDx: convStart.dx,
+        convStartDy: convStart.dy,
+        convEndX: originX - cx0,   // offset transform necessário para chegar ao centro da imagem
+        convEndY: originY - cy0,
+        ampX1, ampX2, ampY1, ampY2,
+        freqX1, freqX2, freqY1, freqY2,
+        phaseX1, phaseX2, phaseY1, phaseY2,
       };
     });
+
+    const cycleDuration = CONFIG.holdBefore + CONFIG.appearDuration
+                        + CONFIG.convergeDuration + CONFIG.holdAfter;
+    const t1 = CONFIG.holdBefore;
+    const t2 = t1 + CONFIG.appearDuration;
+    const t3 = t2 + CONFIG.convergeDuration;
 
     let startTime = null;
 
     function animate(timestamp) {
       if (!startTime) startTime = timestamp;
       const elapsed = (timestamp - startTime) / 1000;
+      const cycleT  = elapsed % cycleDuration;
 
       for (const p of params) {
-        const t = elapsed - p.delay;
-        if (t < 0) continue;
-
-        if (t < CONFIG.travelDuration) {
-          // Fase 1: viagem da imagem até o destino (posição + opacidade)
-          const progress = ease(t / CONFIG.travelDuration);
-          const tx = p.offsetX0 * (1 - progress);
-          const ty = p.offsetY0 * (1 - progress);
-          p.circle.setAttribute('transform', `translate(${tx.toFixed(3)}, ${ty.toFixed(3)})`);
-          p.circle.style.opacity = (progress * p.opacity0).toFixed(3);
-        } else {
-          // Fase 2: flutuação no destino
-          const ft = t - CONFIG.travelDuration;
-          // Fade-in suave para evitar salto na transição (fases aleatórias → dx/dy != 0 em ft=0)
-          const fadeIn = CONFIG.floatFadeIn > 0
-            ? easeInOutCubic(Math.min(1, ft / CONFIG.floatFadeIn))
-            : 1;
-          const dx = fadeIn * (
-            p.ampX1 * Math.sin(2 * Math.PI * p.freqX1 * ft + p.phaseX1)
-          + p.ampX2 * Math.sin(2 * Math.PI * p.freqX2 * ft + p.phaseX2));
-          const dy = fadeIn * (
-            p.ampY1 * Math.sin(2 * Math.PI * p.freqY1 * ft + p.phaseY1)
-          + p.ampY2 * Math.cos(2 * Math.PI * p.freqY2 * ft + p.phaseY2));
+        if (p.isMain) {
+          // Círculo principal: sempre visível, flutua continuamente sem interrupção de ciclo
+          const { dx, dy } = floatOffset(p, elapsed);
           p.circle.setAttribute('transform', `translate(${dx.toFixed(3)}, ${dy.toFixed(3)})`);
+          continue;
+        }
+
+        if (cycleT < t1) {
+          // Fase 1: imagem isolada — círculos invisíveis no destino
+          p.circle.style.opacity = '0';
+          p.circle.setAttribute('transform', 'translate(0, 0)');
+
+        } else if (cycleT < t2) {
+          // Fase 2: aparecer e flutuar
+          const floatT = cycleT - t1 - p.delay;
+          const { dx, dy } = floatOffset(p, floatT);
+          p.circle.setAttribute('transform', `translate(${dx.toFixed(3)}, ${dy.toFixed(3)})`);
+          if (floatT <= 0) {
+            p.circle.style.opacity = '0';
+          } else {
+            p.circle.style.opacity = (easeInOutCubic(Math.min(1, floatT / CONFIG.floatFadeIn)) * p.opacity0).toFixed(3);
+          }
+
+        } else if (cycleT < t3) {
+          // Fase 3: convergir para a imagem (posição + fade-out)
+          const progress = convergeEase((cycleT - t2) / CONFIG.convergeDuration);
+          const tx = p.convStartDx + (p.convEndX - p.convStartDx) * progress;
+          const ty = p.convStartDy + (p.convEndY - p.convStartDy) * progress;
+          p.circle.setAttribute('transform', `translate(${tx.toFixed(3)}, ${ty.toFixed(3)})`);
+          p.circle.style.opacity = ((1 - progress) * p.opacity0).toFixed(3);
+
+        } else {
+          // Fase 4: imagem isolada novamente — círculos invisíveis
+          p.circle.style.opacity = '0';
+          p.circle.setAttribute('transform', 'translate(0, 0)');
         }
       }
 
