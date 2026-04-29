@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+.committee{
+    width: 360px;
+    height: 252px;
+    border-radius: 16px;
+    border-width: 1px;
+    border: 1px solid #000000;
+    padding: 20px 40px;
+    background-color: #f6f6f6;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    box-shadow: -3px 4px 0px 0px #000000;
+    transition: all 0.2s ease;
+}
+
+.committee:hover{
+    box-shadow: -9px 12px 0px 0px #000000;
+    transform: translate(3px, -4px);
+}
+
+.committee .title{
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0%;
+}
+
+.participants{
+    font-weight: 300;
+    font-style: Light;
+    font-size: 16px;
+    line-height: 30px;
+    letter-spacing: 0%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
