@@ -1,0 +1,48 @@
+/* APENAS PARA VISUALIZAÇÃO EM TESTES*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+}
+/* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
+
+@keyframes btn-ping {
+  0%   { transform: scale(1); opacity: 1; }
+  40%, 100% { transform: scaleX(1.35) scaleY(2); opacity: 0; }
+}
+
+.important-dates-btn {
+    border-radius: 25px;
+    border-width: 1px;
+    background-color: #ffff03;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 12px;
+    line-height: 30px;
+    position: relative;
+    padding: 0 10px;
+}
+
+.important-dates-btn:hover{
+    cursor: pointer;
+}
+
+.important-dates-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 25px;
+  border: 1px solid #9BB9F2;
+  opacity: 0;
+  pointer-events: none;
+  animation: btn-ping 3s ease-out infinite;
+}

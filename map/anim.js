@@ -73,10 +73,9 @@ fetch('Topo-PPGP.svg')
       const cy0 = parseFloat(circle.getAttribute('cy'));
       const r   = parseFloat(circle.getAttribute('r'));
 
-      const rawAmp = Math.min(CONFIG.floatAmpMax, Math.max(CONFIG.floatAmpMin, r * 0.8));
-      const amp    = rawAmp * fa;
-
       const isMain = circle.id === 'main-circle';
+      const rawAmp = Math.min(CONFIG.floatAmpMax, Math.max(CONFIG.floatAmpMin, r * 0.8));
+      const amp    = rawAmp * fa * (isMain ? 2 : 1);
       const opacity0 = circle.style.opacity !== '' ? parseFloat(circle.style.opacity) : 1;
       if (!isMain) circle.style.opacity = '0';
       circle.setAttribute('transform', 'translate(0, 0)');

@@ -1,0 +1,227 @@
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+body {
+    font-family: "Montserrat", sans-serif;
+    background: #fafafa;
+    color: #0a0a0a;
+    padding: 56px 40px 80px;
+    cursor: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CURSOR  (lógica em script.js — cursor/script.js adaptado para a vitrine)
+═══════════════════════════════════════════════════════════════════════════════ */
+body,
+a, button, [role="button"],
+input[type="submit"], input[type="button"],
+label, select {
+    cursor: none;
+}
+
+.custom-cursor {
+    width: 16px;
+    height: 16px;
+    background-color: #9bb9f2;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s;
+}
+
+@keyframes cursor-ping {
+    0%   { transform: scale(1);   opacity: 1; }
+    100% { transform: scale(3.5); opacity: 0; }
+}
+
+.custom-cursor::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid #9bb9f2;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.custom-cursor.is-hovering::after {
+    animation: cursor-ping 0.7s ease-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SHOWCASE — HEADER
+═══════════════════════════════════════════════════════════════════════════════ */
+.showcase-header {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #000;
+}
+
+.showcase-kicker {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.showcase-title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SHOWCASE — LISTA
+═══════════════════════════════════════════════════════════════════════════════ */
+.showcase-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — BASE
+═══════════════════════════════════════════════════════════════════════════════ */
+.card {
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: -3px 4px 0px 0px #000;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: -7px 9px 0px 0px #000;
+    transform: translate(2px, -3px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--accent, #e8e8e8);
+    background: #fff;
+}
+
+.card-name {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.card-link {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9bb9f2;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+
+.card iframe {
+    display: block;
+    width: 100%;
+    border: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — MAPA TOPOGRÁFICO  (map/)
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--map      { --accent: #000;    }
+.card--sections { --accent: #9bb9f2; }
+.card--cursor   { --accent: #9bb9f2; }
+.card--committee { --accent: #000;   }
+.card--dates    { --accent: #ffff03; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — MAPA TOPOGRÁFICO  (map/)
+   SVG viewBox ~878×890 — container ocupa 50 % da altura do iframe.
+   640 px → container de 320 px → SVG visível com folga.
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--map iframe { height: 640px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — CABEÇALHO DE SEÇÃO  (sections/)
+   Duas seções empilhadas com gap de 4 rem; 600 px exibe ambas por completo.
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--sections iframe { height: 800px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — CURSOR  (cursor/)
+   Apenas um link centralizado; 200 px é suficiente.
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--cursor iframe { height: 200px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — COMITÊ  (committee/)
+   Card de 252 px de altura; 320 px dá margem de respiro.
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--committee iframe { height: 320px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD — DATAS IMPORTANTES  (important-dates/)
+   Apenas um botão centralizado; 200 px é suficiente.
+═══════════════════════════════════════════════════════════════════════════════ */
+.card--dates iframe { height: 200px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MENU MOBILE  (substitui os iframes em telas pequenas)
+═══════════════════════════════════════════════════════════════════════════════ */
+.mobile-menu {
+    display: none;
+}
+
+.mobile-menu__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #000;
+    text-decoration: none;
+    color: #0a0a0a;
+    font-size: 16px;
+    font-weight: 500;
+    transition: padding-left 0.2s ease;
+}
+
+.mobile-menu__item:first-child {
+    border-top: 1px solid #000;
+}
+
+.mobile-menu__item:active {
+    padding-left: 8px;
+}
+
+.mobile-menu__arrow {
+    font-size: 14px;
+    color: #9bb9f2;
+    flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVIDADE
+═══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+    body { padding: 32px 20px 60px; }
+
+    .showcase-grid { display: none; }
+    .mobile-menu   { display: block; max-width: 800px; margin: 0 auto; }
+}

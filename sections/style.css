@@ -1,0 +1,57 @@
+/* APENAS PARA VISUALIZAÇÃO EM TESTES*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    gap: 4rem
+}
+/* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
+
+section{
+    max-width: 761px;
+    font-family: "Montserrat", sans-serif;
+}
+
+section .section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+section .section-header h2{
+    margin: 0;
+}
+
+.bubble-container {
+    position: relative;
+    width: 180px;
+    height: 72px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+section h2{
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 100%;
+    font-style: SemiBold;
+}
+
+section p{
+    font-weight: 300;
+    font-style: Light;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 8%;
+    margin-bottom: 1rem;
+}

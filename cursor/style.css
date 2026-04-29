@@ -1,0 +1,52 @@
+/* APENAS PARA VISUALIZAÇÃO EM TESTES*/
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
+
+body,
+a, button, [role="button"],
+input[type="submit"], input[type="button"],
+label, select {
+  cursor: none;
+}
+
+.custom-cursor {
+  width: 16px;
+  height: 16px;
+  background-color: #9BB9F2;
+  border-radius: 50%; /* Torna o quadrado um círculo */
+  position: fixed;
+  pointer-events: none; /* Garante que você consiga clicar nos botões "atrás" da bola */
+  z-index: 9999;
+  transform: translate(-50%, -50%); /* Centraliza a bola na ponta do mouse */
+}
+
+@keyframes cursor-ping {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+.custom-cursor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid #9BB9F2;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-cursor.is-hovering::after {
+  animation: cursor-ping 0.7s ease-out infinite;
+}

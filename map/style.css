@@ -1,3 +1,4 @@
+/* APENAS PARA VISUALIZAÇÃO EM TESTES*/
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body { 
@@ -8,6 +9,7 @@ html, body {
   align-items: center; 
   justify-content: center;
 }
+/* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
 
 #svg-container {
   width: 100%;

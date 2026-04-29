@@ -1,3 +1,4 @@
+/* APENAS PARA VISUALIZAÇÃO EM TESTES*/
 *{
     margin: 0;
     padding: 0;
@@ -11,6 +12,7 @@ body{
     height: 100vh;
     background-color: #ffffff;
 }
+/* FIM APENAS PARA VISUALIZAÇÃO EM TESTES*/
 
 .committee{
     width: 360px;

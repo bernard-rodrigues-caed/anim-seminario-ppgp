@@ -1,15 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PPGP — Componentes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>Navigate</nav>
-    <ul>
-        <li><a href="map/index.html">Mapa</a></li>
-        <li><a href="committee/index.html">Comitê</a></li>
-    </ul>
+
+    <header class="showcase-header">
+        <p class="showcase-kicker">Seminário PPGP</p>
+        <h1 class="showcase-title">Biblioteca de Componentes</h1>
+    </header>
+
+    <!-- ── Menu mobile (visível apenas em telas pequenas) ───────────────────── -->
+    <nav class="mobile-menu">
+        <a class="mobile-menu__item" href="map/index.html">
+            <span class="mobile-menu__name">Mapa Topográfico</span>
+            <span class="mobile-menu__arrow">↗</span>
+        </a>
+        <a class="mobile-menu__item" href="sections/index.html">
+            <span class="mobile-menu__name">Cabeçalho de Seção</span>
+            <span class="mobile-menu__arrow">↗</span>
+        </a>
+        <a class="mobile-menu__item" href="cursor/index.html">
+            <span class="mobile-menu__name">Cursor Bolinha</span>
+            <span class="mobile-menu__arrow">↗</span>
+        </a>
+        <a class="mobile-menu__item" href="committee/index.html">
+            <span class="mobile-menu__name">Comitê</span>
+            <span class="mobile-menu__arrow">↗</span>
+        </a>
+        <a class="mobile-menu__item" href="important-dates/index.html">
+            <span class="mobile-menu__name">Datas Importantes</span>
+            <span class="mobile-menu__arrow">↗</span>
+        </a>
+    </nav>
+
+    <main class="showcase-grid">
+
+        <!-- ── Mapa Topográfico ─────────────────────────────────────────────── -->
+        <article class="card card--map">
+            <div class="card-header">
+                <span class="card-name">Mapa Topográfico</span>
+                <a class="card-link" href="map/index.html" target="_blank">↗ abrir</a>
+            </div>
+            <iframe src="map/index.html" title="Mapa Topográfico" loading="lazy"></iframe>
+        </article>
+
+        <!-- ── Cabeçalho de Seção ───────────────────────────────────────────── -->
+        <article class="card card--sections">
+            <div class="card-header">
+                <span class="card-name">Cabeçalho de Seção</span>
+                <a class="card-link" href="sections/index.html" target="_blank">↗ abrir</a>
+            </div>
+            <iframe src="sections/index.html" title="Cabeçalho de Seção" loading="lazy"></iframe>
+        </article>
+
+        <!-- ── Cursor ───────────────────────────────────────────────────────── -->
+        <article class="card card--cursor">
+            <div class="card-header">
+                <span class="card-name">Cursor Bolinha</span>
+                <a class="card-link" href="cursor/index.html" target="_blank">↗ abrir</a>
+            </div>
+            <iframe src="cursor/index.html" title="Cursor" loading="lazy"></iframe>
+        </article>
+
+        <!-- ── Comitê ───────────────────────────────────────────────────────── -->
+        <article class="card card--committee">
+            <div class="card-header">
+                <span class="card-name">Comitê</span>
+                <a class="card-link" href="committee/index.html" target="_blank">↗ abrir</a>
+            </div>
+            <iframe src="committee/index.html" title="Comitê" loading="lazy"></iframe>
+        </article>
+
+        <!-- ── Datas Importantes ────────────────────────────────────────────── -->
+        <article class="card card--dates">
+            <div class="card-header">
+                <span class="card-name">Datas Importantes</span>
+                <a class="card-link" href="important-dates/index.html" target="_blank">↗ abrir</a>
+            </div>
+            <iframe src="important-dates/index.html" title="Datas Importantes" loading="lazy"></iframe>
+        </article>
+
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
