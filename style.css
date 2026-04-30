@@ -11,48 +11,6 @@ body {
     background: #fafafa;
     color: #0a0a0a;
     padding: 56px 40px 80px;
-    cursor: none;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   CURSOR  (lógica em script.js — cursor/script.js adaptado para a vitrine)
-═══════════════════════════════════════════════════════════════════════════════ */
-body,
-a, button, [role="button"],
-input[type="submit"], input[type="button"],
-label, select {
-    cursor: none;
-}
-
-.custom-cursor {
-    width: 16px;
-    height: 16px;
-    background-color: #9bb9f2;
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.2s;
-}
-
-@keyframes cursor-ping {
-    0%   { transform: scale(1);   opacity: 1; }
-    100% { transform: scale(3.5); opacity: 0; }
-}
-
-.custom-cursor::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px solid #9bb9f2;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.custom-cursor.is-hovering::after {
-    animation: cursor-ping 0.7s ease-out infinite;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
