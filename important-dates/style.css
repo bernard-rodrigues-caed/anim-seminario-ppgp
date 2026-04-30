@@ -34,7 +34,7 @@ body {
 .important-dates-btn {
     border-radius: 25px;
     border: none;
-    background-color: rgba(155, 185, 242,1);
+    background-color: #9BB9F2;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     font-size: 14px;
@@ -45,14 +45,16 @@ body {
     position: relative;
     isolation: isolate;
 
-    /* Opção com brilho girando em volta. Não sei se conversa */
-    /* box-shadow:
-        inset calc(sin(var(--ang)) * 1.8px) calc(cos(var(--ang)) * 1.8px) 0 0.5px rgba(255, 255, 255, 0.70),
-        inset calc(sin(var(--ang)) * -1.2px) calc(cos(var(--ang)) * -1.2px) 0 0.5px rgba(0, 0, 0, 0.30),
-        inset 0 0 8px 0 rgba(255, 255, 255, 0.15); */
-
     animation: light-rotate 6s linear infinite;
     transition: background-color 0.2s ease;
+}
+
+.important-dates-btn.glassy{
+    /* Opção com brilho girando em volta. Não sei se conversa */
+    box-shadow:
+        inset calc(sin(var(--ang)) * 1.8px) calc(cos(var(--ang)) * 1.8px) 0 0.5px rgba(255, 255, 255, 0.70),
+        inset calc(sin(var(--ang)) * -1.2px) calc(cos(var(--ang)) * -1.2px) 0 0.5px rgba(0, 0, 0, 0.30),
+        inset 0 0 8px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* glow amarelo — camada separada para poder pulsar independentemente */
@@ -73,5 +75,5 @@ body {
 }
 
 .important-dates-btn:hover {
-    background-color: #e8e800;
+    background-color: color-mix(in srgb, #9BB9F2 90%, #000 10%);
 }
